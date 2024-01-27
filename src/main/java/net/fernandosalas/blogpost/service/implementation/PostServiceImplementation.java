@@ -2,6 +2,7 @@ package net.fernandosalas.blogpost.service.implementation;
 
 import lombok.AllArgsConstructor;
 import net.fernandosalas.blogpost.entity.Post;
+import net.fernandosalas.blogpost.exception.ResourceNotFoundException;
 import net.fernandosalas.blogpost.payload.PostDto;
 import net.fernandosalas.blogpost.repository.PostRepository;
 import net.fernandosalas.blogpost.service.PostService;
@@ -39,13 +40,15 @@ public class PostServiceImplementation implements PostService {
 
     @Override
     public PostDto getPostById(long id) {
-        Post post = postRepository.findById(id).get();
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         return modelMapper.map(post, PostDto.class);
     }
 
     @Override
     public PostDto updatePost(PostDto postDto, long id) {
-        Post post = postRepository.findById(id).get();
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
         post.setDescription(postDto.getDescription());
@@ -55,6 +58,8 @@ public class PostServiceImplementation implements PostService {
 
     @Override
     public void deletePost(long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         postRepository.deleteById(id);
     }
 }
