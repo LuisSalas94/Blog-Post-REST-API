@@ -79,6 +79,14 @@ public class PostServiceImplementation implements PostService {
     }
 
     @Override
+    public List<PostDto> searchPosts(String query) {
+        List<Post> postList = postRepository.searchPosts(query);
+        return postList.stream()
+                .map(post -> modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deletePost(long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));

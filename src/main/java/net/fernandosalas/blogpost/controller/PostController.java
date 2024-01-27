@@ -46,6 +46,11 @@ public class PostController {
         return new ResponseEntity<>(postService.updatePost(postDto, postId), HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<PostDto>> searchPosts(@RequestParam("query") String query) {
+        return new ResponseEntity<>(postService.searchPosts(query), HttpStatus.OK);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<String> deletePost(@PathVariable("id") Long postId) {
         postService.deletePost(postId);
