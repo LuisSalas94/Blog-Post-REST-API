@@ -2,6 +2,7 @@ package net.fernandosalas.blogpost.controller;
 
 import lombok.AllArgsConstructor;
 import net.fernandosalas.blogpost.payload.PostDto;
+import net.fernandosalas.blogpost.payload.PostResponse;
 import net.fernandosalas.blogpost.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,13 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPost() {
-        return new ResponseEntity<>(postService.getAllPost(), HttpStatus.OK);
+    public PostResponse getAllPost(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        return postService.getAllPost(pageNo, pageSize, sortBy, sortDir);
     }
 
     @GetMapping("{id}")
