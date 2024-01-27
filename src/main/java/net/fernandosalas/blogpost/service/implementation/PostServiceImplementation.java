@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class PostServiceImplementation implements PostService {
@@ -24,5 +27,34 @@ public class PostServiceImplementation implements PostService {
         Post post = modelMapper.map(postDto, Post.class);
         Post newPost = postRepository.save(post);
         return modelMapper.map(newPost, PostDto.class);
+    }
+
+    @Override
+    public List<PostDto> getAllPost() {
+        List<Post> postList = postRepository.findAll();
+        return postList.stream()
+                .map(post -> modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDto getPostById(long id) {
+        Post post = postRepository.findById(id).get();
+        return modelMapper.map(post, PostDto.class);
+    }
+
+    @Override
+    public PostDto updatePost(PostDto postDto, long id) {
+        Post post = postRepository.findById(id).get();
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setDescription(postDto.getDescription());
+        Post updatedPost = postRepository.save(post);
+        return modelMapper.map(updatedPost, PostDto.class);
+    }
+
+    @Override
+    public void deletePost(long id) {
+        postRepository.deleteById(id);
     }
 }
