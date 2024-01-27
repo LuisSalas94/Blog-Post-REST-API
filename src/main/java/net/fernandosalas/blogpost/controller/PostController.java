@@ -1,5 +1,6 @@
 package net.fernandosalas.blogpost.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import net.fernandosalas.blogpost.payload.PostDto;
 import net.fernandosalas.blogpost.payload.PostResponse;
@@ -20,7 +21,7 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
@@ -40,7 +41,7 @@ public class PostController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,
+    public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto,
                                               @PathVariable("id") Long postId) {
         return new ResponseEntity<>(postService.updatePost(postDto, postId), HttpStatus.OK);
     }

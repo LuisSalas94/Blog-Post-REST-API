@@ -1,5 +1,6 @@
 package net.fernandosalas.blogpost.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import net.fernandosalas.blogpost.payload.CommentDto;
 import net.fernandosalas.blogpost.service.CommentService;
@@ -19,7 +20,7 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/posts/{postId}/comments")
-    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto,
+    public ResponseEntity<CommentDto> createComment(@Valid @RequestBody CommentDto commentDto,
                                                     @PathVariable(value = "postId") long postId) {
         return new ResponseEntity<>(commentService.createComment(commentDto, postId), HttpStatus.CREATED);
     }
@@ -38,7 +39,7 @@ public class CommentController {
     @PutMapping("/posts/{postId}/comments/{id}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable("postId") long postId,
                                                     @PathVariable("id") long commentId,
-                                                    @RequestBody CommentDto commentDto) {
+                                                    @Valid @RequestBody CommentDto commentDto) {
         return new ResponseEntity<>(commentService.updateComment(postId, commentId, commentDto), HttpStatus.OK);
     }
 
